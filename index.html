@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Australia's Whale Highways — a FIT3179 data visualisation exploring whale migration, seasonal behaviour, breeding activity and long-term southern right whale trends around Australia." />
+  <title>Australia's Whale Highways</title>
+
+  <link rel="stylesheet" href="css/style.css" />
+
+  <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
+</head>
+
+<body>
+  <header class="hero">
+    <div class="hero-inner">
+      <h1>Australia's Whale Highways</h1>
+      <p class="subtitle">Tracking migration, breeding and recovery along Australia's coast</p>
+
+      <div class="hero-question">
+        <span class="question-label">Research question</span>
+        <p>How have whale migration, breeding activity and population patterns changed around Australia?</p>
+      </div>
+
+      <div class="hero-meta">
+        <span>Gan Teik Shaun | 35131209</span>
+      </div>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- SECTION 1 -->
+    <section class="story-section intro-section" id="section-1">
+      <div class="section-heading">
+        <span class="section-number">01</span>
+        <div>
+          <p class="kicker">Introduction</p>
+          <h2>Following Australia's whale highways</h2>
+        </div>
+      </div>
+
+      <p class="section-description">
+        Australia's coastline forms part of a much larger marine system linking feeding, migration and breeding environments across the Southern Hemisphere. Looking at whale movement through both space and time helps place individual sightings within a broader ecological story rather than treating them as isolated records.
+      </p>
+
+      <div class="question-grid">
+        <article>
+          <span>Where?</span>
+          <p>Which parts of Australia's coast repeatedly appear in whale occurrence records?</p>
+        </article>
+        <article>
+          <span>When?</span>
+          <p>How does the timing of observations vary between species and across decades?</p>
+        </article>
+        <article>
+          <span>Recovery?</span>
+          <p>What can long-term southern right whale monitoring tell us about breeding and population change?</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- SECTION 2 -->
+    <section class="story-section" id="section-2">
+      <div class="section-heading">
+        <span class="section-number">02</span>
+        <div>
+          <p class="kicker">Space</p>
+          <h2>Where are Australia's whales?</h2>
+        </div>
+      </div>
+
+      <p class="section-description">
+        Whale records are shaped by geography, access to the coast and where people or monitoring programs are able to observe animals. Reading the maps together therefore helps separate broad spatial structure from the limitations of any single recording method.
+      </p>
+
+      <div class="chart-card chart-wide">
+        <div class="chart-label">Map 1 · Occurrence distribution</div>
+        <div id="vis1" class="vis"></div>
+      </div>
+
+      <div class="two-column">
+        <div class="chart-card">
+          <div class="chart-label">Map 2 · Observation density</div>
+          <div id="vis2" class="vis"></div>
+        </div>
+
+        <div class="chart-card">
+          <div class="chart-label">Map 3 · Seasonal progression</div>
+          <div id="vis3" class="vis"></div>
+        </div>
+      </div>
+
+      <aside class="story-note">
+        <strong>Interpretation note.</strong>
+        The progression map links seasonal observation centroids rather than individual tracked animals, so it should be read as a shift in where records are concentrated through the season.
+      </aside>
+    </section>
+
+    <!-- SECTION 3 -->
+    <section class="story-section alternate" id="section-3">
+      <div class="section-heading">
+        <span class="section-number">03</span>
+        <div>
+          <p class="kicker">Seasonality</p>
+          <h2>When do the whales arrive?</h2>
+        </div>
+      </div>
+
+      <p class="section-description">
+        Migration is not only a question of location; timing determines when different coastal environments become important to each species. Comparing seasonal structure across several temporal views also makes it easier to distinguish recurring patterns from changes that emerge only over longer periods.
+      </p>
+
+      <div class="chart-card chart-wide">
+        <div class="chart-label">Chart 4 · Species × month heatmap</div>
+        <div id="vis4" class="vis"></div>
+      </div>
+
+      <div class="two-column">
+        <div class="chart-card">
+          <div class="chart-label">Chart 5 · Migration ridgeline by decade</div>
+          <div id="vis5" class="vis"></div>
+        </div>
+
+        <div class="chart-card">
+          <div class="chart-label">Chart 6 · Radial seasonal profile</div>
+          <div id="vis6" class="vis"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 4 -->
+    <section class="story-section" id="section-4">
+      <div class="section-heading">
+        <span class="section-number">04</span>
+        <div>
+          <p class="kicker">Long-term monitoring</p>
+          <h2>A 50-year conservation story</h2>
+        </div>
+      </div>
+
+      <p class="section-description">
+        Occurrence records provide useful evidence of presence, but they are not a substitute for structured population monitoring. The southern right whale aerial-survey series adds that longer-term perspective by following the same broad population system across many decades.
+      </p>
+
+      <div class="chart-card chart-wide">
+        <div class="chart-label">Chart 7 · Population timeline</div>
+        <div id="vis7" class="vis"></div>
+      </div>
+
+      <div class="chart-card chart-wide">
+        <div class="chart-label">Chart 8 · Population composition streamgraph</div>
+        <div id="vis8" class="vis"></div>
+      </div>
+
+      <aside class="story-note">
+        <strong>Confidence interval note.</strong>
+        Where a modelled lower confidence bound falls below zero, the visual band is clipped at zero because negative whale abundance is not physically meaningful; the original value remains visible in the tooltip.
+      </aside>
+    </section>
+
+    <!-- SECTION 5 -->
+    <section class="story-section alternate" id="section-5">
+      <div class="section-heading">
+        <span class="section-number">05</span>
+        <div>
+          <p class="kicker">Breeding geography</p>
+          <h2>Is recovery occurring evenly?</h2>
+        </div>
+      </div>
+
+      <p class="section-description">
+        A population can grow overall while still changing unevenly across different parts of its range. Breaking the survey area into coastal segments reveals how local breeding importance can shift even when the broader conservation story appears positive.
+      </p>
+
+      <div class="chart-card chart-wide">
+        <div class="chart-label">Chart 9 · Breeding activity by segment</div>
+        <div id="vis9" class="vis"></div>
+      </div>
+
+      <div class="two-column">
+        <div class="chart-card">
+          <div class="chart-label">Chart 10 · Segment rank bump chart</div>
+          <div id="vis10" class="vis"></div>
+        </div>
+
+        <div class="chart-card">
+          <div class="chart-label">Chart 11 · Connected abundance scatterplot</div>
+          <div id="vis11" class="vis"></div>
+        </div>
+      </div>
+
+      <div class="chart-card chart-medium">
+        <div class="chart-label">Chart 12 · 2000s vs 2020s slopegraph</div>
+        <div id="vis12" class="vis"></div>
+      </div>
+    </section>
+
+    <!-- SECTION 6 -->
+    <section class="story-section conclusion-section" id="section-6">
+      <div class="section-heading">
+        <span class="section-number">06</span>
+        <div>
+          <p class="kicker">Conclusion</p>
+          <h2>A recovery story that is not yet finished</h2>
+        </div>
+      </div>
+
+      <p class="section-description conclusion-copy">
+        Whale migration around Australia is best understood as a connected ecological process rather than a collection of isolated sightings. Seasonal occurrence records reveal how different species use the coastline at different times, while long-term aerial monitoring adds a more reliable view of population and breeding change. Together, the two datasets show why conservation success should be assessed across both geography and time instead of through one headline population number. Continued monitoring remains essential because changes in migration timing, breeding distribution or population composition may become visible before they are obvious at the national scale.
+      </p>
+
+      <div class="takeaway-grid">
+        <article>
+          <span class="takeaway-number">01</span>
+          <h3>Space matters</h3>
+          <p>Different views of the same occurrence data reveal distribution, concentration and seasonal geographic movement.</p>
+        </article>
+
+        <article>
+          <span class="takeaway-number">02</span>
+          <h3>Timing matters</h3>
+          <p>Seasonal behaviour adds an important dimension that cannot be seen from a static map alone.</p>
+        </article>
+
+        <article>
+          <span class="takeaway-number">03</span>
+          <h3>Monitoring matters</h3>
+          <p>Structured survey data are needed before observation counts can be interpreted as long-term population change.</p>
+        </article>
+      </div>
+
+      <div class="sources">
+        <h3>Data sources</h3>
+        <p>
+          Atlas of Living Australia whale occurrence records; Southern right whale monitoring data derived from the Dryad dataset associated with long-term Australian aerial surveys.
+        </p>
+        <p>
+          Visualisation created for FIT3179 Data Visualisation 2. Generative AI was used to assist with planning, wording and code development.
+        </p>
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    <p>Australia's Whale Highways · Shaun Gan · FIT3179 · 2026</p>
+  </footer>
+
+  <script>
+    const charts = [
+      ["#vis1", "specs/01_whale_occurrence_dot_map.json"],
+      ["#vis2", "specs/02_binned_observation_density_map.json"],
+      ["#vis3", "specs/03_migration_centroid_progression_map.json"],
+      ["#vis4", "specs/04_species_month_heatmap.json"],
+      ["#vis5", "specs/05_migration_ridgeline_by_decade.json"],
+      ["#vis6", "specs/06_radial_seasonal_profile.json"],
+      ["#vis7", "specs/07_population_timeline_with_ci.json"],
+      ["#vis8", "specs/08_category_streamgraph.json"],
+      ["#vis9", "specs/09_breeding_segment_heatmap.json"],
+      ["#vis10", "specs/10_segment_rank_bump_chart.json"],
+      ["#vis11", "specs/11_connected_scatter_abundance.json"],
+      ["#vis12", "specs/12_segment_slopegraph_2000s_vs_2020s.json"]
+    ];
+
+    const embedOptions = {
+      actions: false,
+      renderer: "svg"
+    };
+
+    charts.forEach(([selector, spec]) => {
+      vegaEmbed(selector, spec, embedOptions).catch(error => {
+        console.error(`Failed to render ${spec}`, error);
+        const el = document.querySelector(selector);
+        if (el) {
+          el.innerHTML = `
+            <div class="chart-error">
+              <strong>Chart could not be loaded.</strong>
+              <span>${spec}</span>
+            </div>
+          `;
+        }
+      });
+    });
+  </script>
+</body>
+</html>
