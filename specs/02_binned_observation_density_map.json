@@ -1,0 +1,167 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.20.1.json",
+  "description": "Spatially binned whale occurrence density around Australia.",
+  "width": 700,
+  "height": 520,
+  "title": {
+    "text": "Where are observation hotspots?",
+    "subtitle": "Records are aggregated into 2° geographic cells to reduce overplotting."
+  },
+  "params": [
+    {
+      "name": "species_select",
+      "value": "Humpback whale",
+      "bind": {
+        "input": "select",
+        "options": [
+          "Humpback whale",
+          "Southern right whale",
+          "Blue whale"
+        ],
+        "name": "Species: "
+      }
+    }
+  ],
+  "projection": {
+    "type": "mercator"
+  },
+  "layer": [
+    {
+      "data": {
+        "url": "https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json",
+        "format": {
+          "type": "topojson",
+          "feature": "countries"
+        }
+      },
+      "transform": [
+        {
+          "filter": "toNumber(datum.id) == 36"
+        }
+      ],
+      "mark": {
+        "type": "geoshape",
+        "fill": "#f4f4f1",
+        "stroke": "#8d8d86",
+        "strokeWidth": 0.8
+      }
+    },
+    {
+      "data": {
+        "url": "data/whales_for_vega.csv"
+      },
+      "transform": [
+        {
+          "filter": "datum.species_group == species_select"
+        },
+        {
+          "bin": {
+            "step": 2
+          },
+          "field": "decimal_longitude",
+          "as": [
+            "lon0",
+            "lon1"
+          ]
+        },
+        {
+          "bin": {
+            "step": 2
+          },
+          "field": "decimal_latitude",
+          "as": [
+            "lat0",
+            "lat1"
+          ]
+        },
+        {
+          "aggregate": [
+            {
+              "op": "count",
+              "as": "records"
+            }
+          ],
+          "groupby": [
+            "lon0",
+            "lon1",
+            "lat0",
+            "lat1"
+          ]
+        },
+        {
+          "calculate": "(datum.lon0 + datum.lon1) / 2",
+          "as": "lon_mid"
+        },
+        {
+          "calculate": "(datum.lat0 + datum.lat1) / 2",
+          "as": "lat_mid"
+        }
+      ],
+      "mark": {
+        "type": "circle",
+        "opacity": 0.72,
+        "stroke": "white",
+        "strokeWidth": 0.4
+      },
+      "encoding": {
+        "longitude": {
+          "field": "lon_mid",
+          "type": "quantitative"
+        },
+        "latitude": {
+          "field": "lat_mid",
+          "type": "quantitative"
+        },
+        "size": {
+          "field": "records",
+          "type": "quantitative",
+          "scale": {
+            "range": [
+              20,
+              1400
+            ]
+          },
+          "legend": {
+            "title": "Records / cell"
+          }
+        },
+        "color": {
+          "field": "records",
+          "type": "quantitative",
+          "scale": {
+            "scheme": "tealblues"
+          },
+          "legend": {
+            "title": "Observation density"
+          }
+        },
+        "tooltip": [
+          {
+            "field": "records",
+            "type": "quantitative",
+            "title": "Records in 2° cell"
+          }
+        ]
+      }
+    }
+  ],
+  "background": "white",
+  "config": {
+    "font": "Arial",
+    "title": {
+      "fontSize": 20,
+      "anchor": "start"
+    },
+    "axis": {
+      "labelFontSize": 11,
+      "titleFontSize": 12
+    },
+    "legend": {
+      "labelFontSize": 11,
+      "titleFontSize": 12
+    },
+    "view": {
+      "stroke": null
+    }
+  }
+}

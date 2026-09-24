@@ -1,0 +1,92 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.20.1.json",
+  "description": "Cow-calf pair density by survey segment and year.",
+  "width": 780,
+  "height": 250,
+  "title": {
+    "text": "Where has breeding activity been strongest?",
+    "subtitle": "Cow-calf pairs per 100 km across four southern right whale survey segments."
+  },
+  "data": {
+    "url": "data/whales_dryad_segments.csv"
+  },
+  "transform": [
+    {
+      "filter": "datum.Category == 'Cow-calf pairs'"
+    }
+  ],
+  "mark": {
+    "type": "rect"
+  },
+  "encoding": {
+    "x": {
+      "field": "Year",
+      "type": "ordinal",
+      "axis": {
+        "title": "Survey year",
+        "labelAngle": -45,
+        "labelOverlap": "greedy"
+      }
+    },
+    "y": {
+      "field": "SegmentLabel",
+      "type": "nominal",
+      "sort": [
+        "Augusta–Albany",
+        "Albany–Esperance",
+        "Esperance–Caiguna",
+        "Caiguna–Ceduna"
+      ],
+      "axis": {
+        "title": null
+      }
+    },
+    "color": {
+      "field": "per_100km",
+      "type": "quantitative",
+      "scale": {
+        "scheme": "yellowgreenblue"
+      },
+      "legend": {
+        "title": "Cow-calf pairs / 100 km"
+      }
+    },
+    "tooltip": [
+      {
+        "field": "Year",
+        "type": "quantitative",
+        "format": "d"
+      },
+      {
+        "field": "SegmentLabel",
+        "type": "nominal",
+        "title": "Segment"
+      },
+      {
+        "field": "per_100km",
+        "type": "quantitative",
+        "format": ".2f",
+        "title": "Pairs / 100 km"
+      }
+    ]
+  },
+  "background": "white",
+  "config": {
+    "font": "Arial",
+    "title": {
+      "fontSize": 20,
+      "anchor": "start"
+    },
+    "axis": {
+      "labelFontSize": 11,
+      "titleFontSize": 12
+    },
+    "legend": {
+      "labelFontSize": 11,
+      "titleFontSize": 12
+    },
+    "view": {
+      "stroke": null
+    }
+  }
+}

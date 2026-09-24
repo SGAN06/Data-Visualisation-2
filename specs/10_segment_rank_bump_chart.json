@@ -1,0 +1,162 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.20.1.json",
+  "description": "Bump chart ranking coastal segments by average cow-calf density per decade.",
+  "width": 760,
+  "height": 360,
+  "title": {
+    "text": "Which breeding regions became more or less prominent?",
+    "subtitle": "Segments are ranked by average cow-calf pairs per 100 km within each decade."
+  },
+  "data": {
+    "url": "data/whales_dryad_segments.csv"
+  },
+  "transform": [
+    {
+      "filter": "datum.Category == 'Cow-calf pairs'"
+    },
+    {
+      "calculate": "floor(datum.Year / 10) * 10",
+      "as": "Decade"
+    },
+    {
+      "aggregate": [
+        {
+          "op": "mean",
+          "field": "per_100km",
+          "as": "mean_per_100km"
+        }
+      ],
+      "groupby": [
+        "Decade",
+        "SegmentLabel"
+      ]
+    },
+    {
+      "window": [
+        {
+          "op": "rank",
+          "as": "Rank"
+        }
+      ],
+      "sort": [
+        {
+          "field": "mean_per_100km",
+          "order": "descending"
+        }
+      ],
+      "groupby": [
+        "Decade"
+      ]
+    }
+  ],
+  "layer": [
+    {
+      "mark": {
+        "type": "line",
+        "strokeWidth": 3
+      },
+      "encoding": {
+        "x": {
+          "field": "Decade",
+          "type": "ordinal",
+          "axis": {
+            "title": "Decade"
+          }
+        },
+        "y": {
+          "field": "Rank",
+          "type": "quantitative",
+          "scale": {
+            "domain": [
+              4.3,
+              0.7
+            ]
+          },
+          "axis": {
+            "title": "Rank",
+            "tickMinStep": 1
+          }
+        },
+        "color": {
+          "field": "SegmentLabel",
+          "type": "nominal",
+          "legend": {
+            "title": "Coastal segment"
+          }
+        },
+        "detail": {
+          "field": "SegmentLabel"
+        }
+      }
+    },
+    {
+      "mark": {
+        "type": "circle",
+        "size": 100,
+        "stroke": "white",
+        "strokeWidth": 1
+      },
+      "encoding": {
+        "x": {
+          "field": "Decade",
+          "type": "ordinal"
+        },
+        "y": {
+          "field": "Rank",
+          "type": "quantitative",
+          "scale": {
+            "domain": [
+              4.3,
+              0.7
+            ]
+          }
+        },
+        "color": {
+          "field": "SegmentLabel",
+          "type": "nominal"
+        },
+        "tooltip": [
+          {
+            "field": "Decade",
+            "type": "ordinal"
+          },
+          {
+            "field": "SegmentLabel",
+            "type": "nominal",
+            "title": "Segment"
+          },
+          {
+            "field": "Rank",
+            "type": "quantitative",
+            "title": "Rank"
+          },
+          {
+            "field": "mean_per_100km",
+            "type": "quantitative",
+            "format": ".2f",
+            "title": "Mean pairs / 100 km"
+          }
+        ]
+      }
+    }
+  ],
+  "background": "white",
+  "config": {
+    "font": "Arial",
+    "title": {
+      "fontSize": 20,
+      "anchor": "start"
+    },
+    "axis": {
+      "labelFontSize": 11,
+      "titleFontSize": 12
+    },
+    "legend": {
+      "labelFontSize": 11,
+      "titleFontSize": 12
+    },
+    "view": {
+      "stroke": null
+    }
+  }
+}

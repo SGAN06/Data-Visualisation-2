@@ -1,0 +1,132 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.20.1.json",
+  "description": "Ridgeline density of occurrence day-of-year by decade.",
+  "title": {
+    "text": "Has the seasonal observation peak shifted across decades?",
+    "subtitle": "Each ridge shows the distribution of day-of-year records within one decade."
+  },
+  "data": {
+    "url": "data/whales_for_vega.csv"
+  },
+  "params": [
+    {
+      "name": "species_select",
+      "value": "Humpback whale",
+      "bind": {
+        "input": "select",
+        "options": [
+          "Humpback whale",
+          "Southern right whale",
+          "Blue whale"
+        ],
+        "name": "Species: "
+      }
+    }
+  ],
+  "transform": [
+    {
+      "filter": "datum.species_group == species_select"
+    },
+    {
+      "filter": "datum.year >= 1970"
+    },
+    {
+      "density": "day_of_year",
+      "groupby": [
+        "decade_start"
+      ],
+      "extent": [
+        1,
+        365
+      ],
+      "steps": 120,
+      "as": [
+        "doy",
+        "density"
+      ]
+    }
+  ],
+  "facet": {
+    "row": {
+      "field": "decade_start",
+      "type": "ordinal",
+      "sort": "descending",
+      "header": {
+        "title": null,
+        "labelAngle": 0,
+        "labelAlign": "left"
+      }
+    }
+  },
+  "spec": {
+    "width": 700,
+    "height": 55,
+    "mark": {
+      "type": "area",
+      "interpolate": "monotone",
+      "opacity": 0.75
+    },
+    "encoding": {
+      "x": {
+        "field": "doy",
+        "type": "quantitative",
+        "scale": {
+          "domain": [
+            1,
+            365
+          ]
+        },
+        "axis": {
+          "title": "Day of year",
+          "values": [
+            1,
+            60,
+            121,
+            182,
+            244,
+            305,
+            365
+          ]
+        }
+      },
+      "y": {
+        "field": "density",
+        "type": "quantitative",
+        "axis": null
+      },
+      "color": {
+        "field": "decade_start",
+        "type": "ordinal",
+        "scale": {
+          "scheme": "blues"
+        },
+        "legend": null
+      }
+    }
+  },
+  "resolve": {
+    "scale": {
+      "y": "independent"
+    }
+  },
+  "spacing": -8,
+  "background": "white",
+  "config": {
+    "font": "Arial",
+    "title": {
+      "fontSize": 20,
+      "anchor": "start"
+    },
+    "axis": {
+      "labelFontSize": 11,
+      "titleFontSize": 12
+    },
+    "legend": {
+      "labelFontSize": 11,
+      "titleFontSize": 12
+    },
+    "view": {
+      "stroke": null
+    }
+  }
+}

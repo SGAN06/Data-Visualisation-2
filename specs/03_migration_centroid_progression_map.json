@@ -1,0 +1,273 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.20.1.json",
+  "description": "Seasonal progression of observation centroids, not individual whale tracks.",
+  "width": 700,
+  "height": 520,
+  "title": {
+    "text": "How does the centre of observation shift through the migration season?",
+    "subtitle": "Lines connect seasonal observation centroids; they are not individual whale tracks."
+  },
+  "params": [
+    {
+      "name": "species_select",
+      "value": "Humpback whale",
+      "bind": {
+        "input": "select",
+        "options": [
+          "Humpback whale",
+          "Southern right whale",
+          "Blue whale"
+        ],
+        "name": "Species: "
+      }
+    }
+  ],
+  "projection": {
+    "type": "mercator"
+  },
+  "layer": [
+    {
+      "data": {
+        "url": "https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json",
+        "format": {
+          "type": "topojson",
+          "feature": "countries"
+        }
+      },
+      "transform": [
+        {
+          "filter": "toNumber(datum.id) == 36"
+        }
+      ],
+      "mark": {
+        "type": "geoshape",
+        "fill": "#f1f3f2",
+        "stroke": "#90999b",
+        "strokeWidth": 0.8
+      }
+    },
+    {
+      "data": {
+        "url": "data/whales_for_vega.csv"
+      },
+      "transform": [
+        {
+          "filter": "datum.species_group == species_select"
+        },
+        {
+          "filter": "datum.migration_phase != 'Off-season'"
+        },
+        {
+          "calculate": "datum.migration_phase == 'Apr-May' ? 1 : datum.migration_phase == 'Jun-Jul' ? 2 : datum.migration_phase == 'Aug-Sep' ? 3 : 4",
+          "as": "phase_order"
+        },
+        {
+          "aggregate": [
+            {
+              "op": "mean",
+              "field": "decimal_longitude",
+              "as": "mean_lon"
+            },
+            {
+              "op": "mean",
+              "field": "decimal_latitude",
+              "as": "mean_lat"
+            },
+            {
+              "op": "count",
+              "as": "records"
+            }
+          ],
+          "groupby": [
+            "migration_phase",
+            "phase_order"
+          ]
+        }
+      ],
+      "mark": {
+        "type": "line",
+        "strokeWidth": 4,
+        "opacity": 0.75
+      },
+      "encoding": {
+        "longitude": {
+          "field": "mean_lon",
+          "type": "quantitative"
+        },
+        "latitude": {
+          "field": "mean_lat",
+          "type": "quantitative"
+        },
+        "order": {
+          "field": "phase_order",
+          "type": "ordinal"
+        },
+        "color": {
+          "value": "#345995"
+        }
+      }
+    },
+    {
+      "data": {
+        "url": "data/whales_for_vega.csv"
+      },
+      "transform": [
+        {
+          "filter": "datum.species_group == species_select"
+        },
+        {
+          "filter": "datum.migration_phase != 'Off-season'"
+        },
+        {
+          "calculate": "datum.migration_phase == 'Apr-May' ? 1 : datum.migration_phase == 'Jun-Jul' ? 2 : datum.migration_phase == 'Aug-Sep' ? 3 : 4",
+          "as": "phase_order"
+        },
+        {
+          "aggregate": [
+            {
+              "op": "mean",
+              "field": "decimal_longitude",
+              "as": "mean_lon"
+            },
+            {
+              "op": "mean",
+              "field": "decimal_latitude",
+              "as": "mean_lat"
+            },
+            {
+              "op": "count",
+              "as": "records"
+            }
+          ],
+          "groupby": [
+            "migration_phase",
+            "phase_order"
+          ]
+        }
+      ],
+      "mark": {
+        "type": "circle",
+        "size": 220,
+        "stroke": "white",
+        "strokeWidth": 1.5
+      },
+      "encoding": {
+        "longitude": {
+          "field": "mean_lon",
+          "type": "quantitative"
+        },
+        "latitude": {
+          "field": "mean_lat",
+          "type": "quantitative"
+        },
+        "color": {
+          "field": "phase_order",
+          "type": "ordinal",
+          "scale": {
+            "scheme": "blues"
+          },
+          "legend": null
+        },
+        "tooltip": [
+          {
+            "field": "migration_phase",
+            "type": "nominal",
+            "title": "Migration phase"
+          },
+          {
+            "field": "records",
+            "type": "quantitative",
+            "title": "Records"
+          },
+          {
+            "field": "mean_lat",
+            "type": "quantitative",
+            "format": ".2f",
+            "title": "Mean latitude"
+          },
+          {
+            "field": "mean_lon",
+            "type": "quantitative",
+            "format": ".2f",
+            "title": "Mean longitude"
+          }
+        ]
+      }
+    },
+    {
+      "data": {
+        "url": "data/whales_for_vega.csv"
+      },
+      "transform": [
+        {
+          "filter": "datum.species_group == species_select"
+        },
+        {
+          "filter": "datum.migration_phase != 'Off-season'"
+        },
+        {
+          "calculate": "datum.migration_phase == 'Apr-May' ? 1 : datum.migration_phase == 'Jun-Jul' ? 2 : datum.migration_phase == 'Aug-Sep' ? 3 : 4",
+          "as": "phase_order"
+        },
+        {
+          "aggregate": [
+            {
+              "op": "mean",
+              "field": "decimal_longitude",
+              "as": "mean_lon"
+            },
+            {
+              "op": "mean",
+              "field": "decimal_latitude",
+              "as": "mean_lat"
+            }
+          ],
+          "groupby": [
+            "migration_phase",
+            "phase_order"
+          ]
+        }
+      ],
+      "mark": {
+        "type": "text",
+        "dx": 10,
+        "dy": -10,
+        "align": "left",
+        "fontSize": 11
+      },
+      "encoding": {
+        "longitude": {
+          "field": "mean_lon",
+          "type": "quantitative"
+        },
+        "latitude": {
+          "field": "mean_lat",
+          "type": "quantitative"
+        },
+        "text": {
+          "field": "migration_phase",
+          "type": "nominal"
+        }
+      }
+    }
+  ],
+  "background": "white",
+  "config": {
+    "font": "Arial",
+    "title": {
+      "fontSize": 20,
+      "anchor": "start"
+    },
+    "axis": {
+      "labelFontSize": 11,
+      "titleFontSize": 12
+    },
+    "legend": {
+      "labelFontSize": 11,
+      "titleFontSize": 12
+    },
+    "view": {
+      "stroke": null
+    }
+  }
+}

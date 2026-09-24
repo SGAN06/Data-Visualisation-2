@@ -1,0 +1,87 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.20.1.json",
+  "description": "Streamgraph comparing cow-calf pair and unaccompanied modelled abundance.",
+  "width": 760,
+  "height": 380,
+  "title": {
+    "text": "How has the composition of monitored whales changed?",
+    "subtitle": "The centred streamgraph contrasts modelled cow-calf pair and unaccompanied abundance."
+  },
+  "data": {
+    "url": "data/whales_dryad_totals.csv"
+  },
+  "mark": {
+    "type": "area",
+    "interpolate": "monotone",
+    "opacity": 0.8
+  },
+  "encoding": {
+    "x": {
+      "field": "Year",
+      "type": "quantitative",
+      "axis": {
+        "format": "d",
+        "title": "Year"
+      }
+    },
+    "y": {
+      "field": "MeanFit",
+      "type": "quantitative",
+      "stack": "center",
+      "axis": null
+    },
+    "color": {
+      "field": "Category",
+      "type": "nominal",
+      "scale": {
+        "domain": [
+          "Cow-calf pairs",
+          "Unaccompanied"
+        ],
+        "range": [
+          "#D1495B",
+          "#276FBF"
+        ]
+      },
+      "legend": {
+        "title": null
+      }
+    },
+    "tooltip": [
+      {
+        "field": "Year",
+        "type": "quantitative",
+        "format": "d"
+      },
+      {
+        "field": "Category",
+        "type": "nominal"
+      },
+      {
+        "field": "MeanFit",
+        "type": "quantitative",
+        "format": ".1f",
+        "title": "Modelled abundance"
+      }
+    ]
+  },
+  "background": "white",
+  "config": {
+    "font": "Arial",
+    "title": {
+      "fontSize": 20,
+      "anchor": "start"
+    },
+    "axis": {
+      "labelFontSize": 11,
+      "titleFontSize": 12
+    },
+    "legend": {
+      "labelFontSize": 11,
+      "titleFontSize": 12
+    },
+    "view": {
+      "stroke": null
+    }
+  }
+}

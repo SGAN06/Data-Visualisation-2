@@ -1,0 +1,133 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.20.1.json",
+  "description": "Radial monthly occurrence profile for a selected whale species.",
+  "width": 500,
+  "height": 500,
+  "title": {
+    "text": "How concentrated is the migration season?",
+    "subtitle": "Longer sectors indicate months with more occurrence records."
+  },
+  "data": {
+    "url": "data/whales_for_vega.csv"
+  },
+  "params": [
+    {
+      "name": "species_select",
+      "value": "Humpback whale",
+      "bind": {
+        "input": "select",
+        "options": [
+          "Humpback whale",
+          "Southern right whale",
+          "Blue whale"
+        ],
+        "name": "Species: "
+      }
+    }
+  ],
+  "transform": [
+    {
+      "filter": "datum.species_group == species_select"
+    },
+    {
+      "aggregate": [
+        {
+          "op": "count",
+          "as": "records"
+        }
+      ],
+      "groupby": [
+        "month",
+        "month_name"
+      ]
+    }
+  ],
+  "mark": {
+    "type": "arc",
+    "innerRadius": 45,
+    "stroke": "white",
+    "strokeWidth": 1
+  },
+  "encoding": {
+    "theta": {
+      "field": "month_name",
+      "type": "ordinal",
+      "sort": [
+        "Jan",
+        "Feb",
+        "Mar",
+        "Apr",
+        "May",
+        "Jun",
+        "Jul",
+        "Aug",
+        "Sep",
+        "Oct",
+        "Nov",
+        "Dec"
+      ]
+    },
+    "radius": {
+      "field": "records",
+      "type": "quantitative",
+      "scale": {
+        "type": "sqrt",
+        "zero": true,
+        "rangeMin": 55
+      }
+    },
+    "color": {
+      "field": "month_name",
+      "type": "ordinal",
+      "sort": [
+        "Jan",
+        "Feb",
+        "Mar",
+        "Apr",
+        "May",
+        "Jun",
+        "Jul",
+        "Aug",
+        "Sep",
+        "Oct",
+        "Nov",
+        "Dec"
+      ],
+      "scale": {
+        "scheme": "blues"
+      },
+      "legend": null
+    },
+    "tooltip": [
+      {
+        "field": "month_name",
+        "type": "nominal",
+        "title": "Month"
+      },
+      {
+        "field": "records",
+        "type": "quantitative",
+        "title": "Occurrence records"
+      }
+    ]
+  },
+  "background": "white",
+  "config": {
+    "font": "Arial",
+    "title": {
+      "fontSize": 20,
+      "anchor": "start"
+    },
+    "axis": {
+      "labelFontSize": 11,
+      "titleFontSize": 12
+    },
+    "legend": {
+      "labelFontSize": 11,
+      "titleFontSize": 12
+    },
+    "view": {
+      "stroke": null
+    }
+  }
+}

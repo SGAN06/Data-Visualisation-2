@@ -1,0 +1,133 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.20.1.json",
+  "description": "Australian whale occurrence records by species.",
+  "width": 700,
+  "height": 520,
+  "title": {
+    "text": "Where are whales observed around Australia?",
+    "subtitle": "Each point is one occurrence record; use the selector to compare species."
+  },
+  "params": [
+    {
+      "name": "species_select",
+      "value": "Humpback whale",
+      "bind": {
+        "input": "select",
+        "options": [
+          "Humpback whale",
+          "Southern right whale",
+          "Blue whale"
+        ],
+        "name": "Species: "
+      }
+    }
+  ],
+  "projection": {
+    "type": "mercator"
+  },
+  "layer": [
+    {
+      "data": {
+        "url": "https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json",
+        "format": {
+          "type": "topojson",
+          "feature": "countries"
+        }
+      },
+      "transform": [
+        {
+          "filter": "toNumber(datum.id) == 36"
+        }
+      ],
+      "mark": {
+        "type": "geoshape",
+        "fill": "#eef2f3",
+        "stroke": "#8a979d",
+        "strokeWidth": 0.8
+      }
+    },
+    {
+      "data": {
+        "url": "data/whales_for_vega.csv"
+      },
+      "transform": [
+        {
+          "filter": "datum.species_group == species_select"
+        }
+      ],
+      "mark": {
+        "type": "circle",
+        "opacity": 0.28,
+        "size": 24
+      },
+      "encoding": {
+        "longitude": {
+          "field": "decimal_longitude",
+          "type": "quantitative"
+        },
+        "latitude": {
+          "field": "decimal_latitude",
+          "type": "quantitative"
+        },
+        "color": {
+          "field": "species_group",
+          "type": "nominal",
+          "scale": {
+            "domain": [
+              "Humpback whale",
+              "Southern right whale",
+              "Blue whale"
+            ],
+            "range": [
+              "#276FBF",
+              "#D1495B",
+              "#2A9D8F"
+            ]
+          },
+          "legend": null
+        },
+        "tooltip": [
+          {
+            "field": "species_group",
+            "type": "nominal",
+            "title": "Species"
+          },
+          {
+            "field": "event_date",
+            "type": "nominal",
+            "title": "Date"
+          },
+          {
+            "field": "state",
+            "type": "nominal",
+            "title": "State"
+          },
+          {
+            "field": "observation_type",
+            "type": "nominal",
+            "title": "Record type"
+          }
+        ]
+      }
+    }
+  ],
+  "background": "white",
+  "config": {
+    "font": "Arial",
+    "title": {
+      "fontSize": 20,
+      "anchor": "start"
+    },
+    "axis": {
+      "labelFontSize": 11,
+      "titleFontSize": 12
+    },
+    "legend": {
+      "labelFontSize": 11,
+      "titleFontSize": 12
+    },
+    "view": {
+      "stroke": null
+    }
+  }
+}

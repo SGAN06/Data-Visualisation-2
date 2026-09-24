@@ -1,0 +1,112 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.20.1.json",
+  "description": "Connected scatterplot of modelled cow-calf and unaccompanied abundance over time.",
+  "width": 620,
+  "height": 500,
+  "title": {
+    "text": "Did breeding and other abundance change together?",
+    "subtitle": "Each point is a year; the path follows time from 1976 to 2024."
+  },
+  "data": {
+    "url": "data/whales_dryad_totals.csv"
+  },
+  "transform": [
+    {
+      "pivot": "Category",
+      "value": "MeanFit",
+      "groupby": [
+        "Year"
+      ]
+    }
+  ],
+  "layer": [
+    {
+      "mark": {
+        "type": "line",
+        "strokeWidth": 2,
+        "opacity": 0.55
+      },
+      "encoding": {
+        "x": {
+          "field": "Unaccompanied",
+          "type": "quantitative",
+          "title": "Unaccompanied — modelled abundance"
+        },
+        "y": {
+          "field": "Cow-calf pairs",
+          "type": "quantitative",
+          "title": "Cow-calf pairs — modelled abundance"
+        },
+        "order": {
+          "field": "Year",
+          "type": "quantitative"
+        },
+        "color": {
+          "value": "#777777"
+        }
+      }
+    },
+    {
+      "mark": {
+        "type": "circle",
+        "size": 75
+      },
+      "encoding": {
+        "x": {
+          "field": "Unaccompanied",
+          "type": "quantitative"
+        },
+        "y": {
+          "field": "Cow-calf pairs",
+          "type": "quantitative"
+        },
+        "color": {
+          "field": "Year",
+          "type": "quantitative",
+          "scale": {
+            "scheme": "viridis"
+          },
+          "legend": {
+            "title": "Year"
+          }
+        },
+        "tooltip": [
+          {
+            "field": "Year",
+            "type": "quantitative",
+            "format": "d"
+          },
+          {
+            "field": "Cow-calf pairs",
+            "type": "quantitative",
+            "format": ".1f"
+          },
+          {
+            "field": "Unaccompanied",
+            "type": "quantitative",
+            "format": ".1f"
+          }
+        ]
+      }
+    }
+  ],
+  "background": "white",
+  "config": {
+    "font": "Arial",
+    "title": {
+      "fontSize": 20,
+      "anchor": "start"
+    },
+    "axis": {
+      "labelFontSize": 11,
+      "titleFontSize": 12
+    },
+    "legend": {
+      "labelFontSize": 11,
+      "titleFontSize": 12
+    },
+    "view": {
+      "stroke": null
+    }
+  }
+}

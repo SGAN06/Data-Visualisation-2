@@ -1,0 +1,145 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.20.1.json",
+  "description": "Modelled southern right whale abundance with confidence intervals.",
+  "width": 760,
+  "height": 420,
+  "title": {
+    "text": "Nearly five decades of southern right whale change",
+    "subtitle": "Lower confidence bounds are visually clipped at zero because abundance cannot be negative; raw bounds remain in tooltips."
+  },
+  "data": {
+    "url": "data/whales_dryad_totals.csv"
+  },
+  "transform": [
+    {
+      "calculate": "max(datum.CI_lo, 0)",
+      "as": "CI_lo_display"
+    }
+  ],
+  "layer": [
+    {
+      "mark": {
+        "type": "area",
+        "opacity": 0.14
+      },
+      "encoding": {
+        "x": {
+          "field": "Year",
+          "type": "quantitative",
+          "axis": {
+            "format": "d",
+            "title": "Year"
+          }
+        },
+        "y": {
+          "field": "CI_lo_display",
+          "type": "quantitative",
+          "title": "Modelled abundance"
+        },
+        "y2": {
+          "field": "CI_up"
+        },
+        "color": {
+          "field": "Category",
+          "type": "nominal",
+          "scale": {
+            "domain": [
+              "Cow-calf pairs",
+              "Unaccompanied"
+            ],
+            "range": [
+              "#D1495B",
+              "#276FBF"
+            ]
+          },
+          "legend": {
+            "title": null
+          }
+        }
+      }
+    },
+    {
+      "mark": {
+        "type": "line",
+        "strokeWidth": 2.5
+      },
+      "encoding": {
+        "x": {
+          "field": "Year",
+          "type": "quantitative",
+          "axis": {
+            "format": "d",
+            "title": "Year"
+          }
+        },
+        "y": {
+          "field": "MeanFit",
+          "type": "quantitative",
+          "title": "Modelled abundance"
+        },
+        "color": {
+          "field": "Category",
+          "type": "nominal",
+          "scale": {
+            "domain": [
+              "Cow-calf pairs",
+              "Unaccompanied"
+            ],
+            "range": [
+              "#D1495B",
+              "#276FBF"
+            ]
+          }
+        },
+        "tooltip": [
+          {
+            "field": "Year",
+            "type": "quantitative",
+            "format": "d"
+          },
+          {
+            "field": "Category",
+            "type": "nominal"
+          },
+          {
+            "field": "MeanFit",
+            "type": "quantitative",
+            "format": ".1f",
+            "title": "Mean estimate"
+          },
+          {
+            "field": "CI_lo",
+            "type": "quantitative",
+            "format": ".1f",
+            "title": "Raw CI lower"
+          },
+          {
+            "field": "CI_up",
+            "type": "quantitative",
+            "format": ".1f",
+            "title": "CI upper"
+          }
+        ]
+      }
+    }
+  ],
+  "background": "white",
+  "config": {
+    "font": "Arial",
+    "title": {
+      "fontSize": 20,
+      "anchor": "start"
+    },
+    "axis": {
+      "labelFontSize": 11,
+      "titleFontSize": 12
+    },
+    "legend": {
+      "labelFontSize": 11,
+      "titleFontSize": 12
+    },
+    "view": {
+      "stroke": null
+    }
+  }
+}

@@ -1,0 +1,133 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.20.1.json",
+  "description": "Normalized monthly occurrence pattern by species.",
+  "width": 720,
+  "height": 220,
+  "title": {
+    "text": "Australia's whale calendar",
+    "subtitle": "Colour shows each species' within-species share of records, making seasonal timing comparable."
+  },
+  "data": {
+    "url": "data/whales_for_vega.csv"
+  },
+  "transform": [
+    {
+      "aggregate": [
+        {
+          "op": "count",
+          "as": "records"
+        }
+      ],
+      "groupby": [
+        "species_group",
+        "month",
+        "month_name"
+      ]
+    },
+    {
+      "joinaggregate": [
+        {
+          "op": "sum",
+          "field": "records",
+          "as": "species_total"
+        }
+      ],
+      "groupby": [
+        "species_group"
+      ]
+    },
+    {
+      "calculate": "datum.records / datum.species_total",
+      "as": "share"
+    }
+  ],
+  "mark": {
+    "type": "rect",
+    "stroke": "white",
+    "strokeWidth": 0.5
+  },
+  "encoding": {
+    "x": {
+      "field": "month_name",
+      "type": "ordinal",
+      "sort": [
+        "Jan",
+        "Feb",
+        "Mar",
+        "Apr",
+        "May",
+        "Jun",
+        "Jul",
+        "Aug",
+        "Sep",
+        "Oct",
+        "Nov",
+        "Dec"
+      ],
+      "axis": {
+        "title": null,
+        "labelAngle": 0
+      }
+    },
+    "y": {
+      "field": "species_group",
+      "type": "nominal",
+      "axis": {
+        "title": null
+      }
+    },
+    "color": {
+      "field": "share",
+      "type": "quantitative",
+      "scale": {
+        "scheme": "viridis"
+      },
+      "legend": {
+        "title": "Share of species records",
+        "format": ".0%"
+      }
+    },
+    "tooltip": [
+      {
+        "field": "species_group",
+        "type": "nominal",
+        "title": "Species"
+      },
+      {
+        "field": "month_name",
+        "type": "nominal",
+        "title": "Month"
+      },
+      {
+        "field": "records",
+        "type": "quantitative",
+        "title": "Records"
+      },
+      {
+        "field": "share",
+        "type": "quantitative",
+        "format": ".1%",
+        "title": "Within-species share"
+      }
+    ]
+  },
+  "background": "white",
+  "config": {
+    "font": "Arial",
+    "title": {
+      "fontSize": 20,
+      "anchor": "start"
+    },
+    "axis": {
+      "labelFontSize": 11,
+      "titleFontSize": 12
+    },
+    "legend": {
+      "labelFontSize": 11,
+      "titleFontSize": 12
+    },
+    "view": {
+      "stroke": null
+    }
+  }
+}
