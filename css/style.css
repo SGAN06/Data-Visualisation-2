@@ -377,6 +377,29 @@ footer {
   color: var(--ink);
 }
 
+
+#vis1,
+#vis7,
+#vis8 {
+  display: flex;
+  justify-content: center;
+}
+
+#vis1 .vega-embed,
+#vis7 .vega-embed,
+#vis8 .vega-embed {
+  width: auto;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#vis1 .vega-embed > div,
+#vis7 .vega-embed > div,
+#vis8 .vega-embed > div {
+  margin-left: auto;
+  margin-right: auto;
+}
+
 /* Tablet */
 @media (max-width: 960px) {
   .two-column,
